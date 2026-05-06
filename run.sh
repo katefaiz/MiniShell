@@ -4,3 +4,6 @@ g++ main.cpp arithmetic.cpp read.cpp builtins.cpp if_while.cpp test.cpp -o minis
 g++ launch.cpp -o launch
 
 ./launch
+
+rm minishell
+rm launch

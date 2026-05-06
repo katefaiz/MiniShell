@@ -2,15 +2,7 @@
 #define BUILTINS_H
 //TODO переименовать файл 
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include <unistd.h>
-#include <dirent.h>
-#include <limits.h>
-#include <sys/stat.h>
-
+#include "tools.h"
 #include "if_while.h"
 #include "test.h"
 

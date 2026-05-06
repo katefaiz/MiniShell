@@ -1,19 +1,14 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#ifdef __APPLE__ // извините, я маковод
+#ifdef __APPLE__ 
   #include <util.h>
 #else
   #include <pty.h>
 #endif
-#include <sys/wait.h>
-#include <assert.h>
-#include <stdbool.h>
-#include <string.h>
 
-#define DEFAULT_BIG_BUF_SIZE 1024
+#include "tools.h"
+
+#define DEFAULT_BIG_BUF_SIZE    1024
 #define DEFAULT_MIDDLE_BUF_SIZE 256
-#define DEFAULT_SMALL_BUF_SIZE 16
+#define DEFAULT_SMALL_BUF_SIZE  16
 
 void InitSHLVL(void) {
     char *shlvl = getenv("SHLVL");
@@ -60,7 +55,7 @@ void Output(const char *buf, int len) {
 }
 
 void Exit(void) {
-    printf("\n[shell завершен]\n");
+    printf(GREEN("\n[shell завершен]\n"));
 }
 
 int main() {

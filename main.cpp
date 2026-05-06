@@ -3,18 +3,17 @@
 #include "read.h"
 #include "builtins.h"
 #include "arithmetic.h"
-
+#include "tools.h"
 
 int main() {
     about_text text;
     status s;
 
     while (1) {
-        // printf("%s :) ", getenv("PWD"));
         char buffer[PATH_MAX];
         getcwd(buffer, sizeof(buffer)); //возвращает путь к текущему рабочему каталогу.
-        printf("%s :) ", buffer); 
-         
+        printf(BLUE("%s :) "), buffer); 
+
         fflush(stdout);
 
         s = Read(&text, stdin);

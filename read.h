@@ -1,8 +1,8 @@
 #ifndef READ_H_
 #define READ_H_
 
-#include <cstddef>
-#include <stdio.h>
+#include "tools.h"
+
 const int REALLOC_COEFF = 2;
 const int START_CAPACITY = 128;
 

@@ -12,15 +12,15 @@ int EchoBuiltins(char **tokens) {
     return 0;
 }
 
-//* getenv("HOME") ищет в окружении переменную с именем HOME и возвращает указатель на её значение (строку).те путь к домашнему каталогу
-//* chdir Отображает имя текущего каталога или изменяет текущий каталог.
 int CdBuiltins(char **tokens) {
     const char* path = tokens[1];
-    if (path == NULL) { //случай, когда после cd ничего не идет, тогда идет в корень
+    if (path == NULL) {
         path = getenv("HOME");
     }
-    chdir(path); //меняет директорию
-
+    if (chdir(path) != 0) {
+        printf(RED("No such file or directory\n"));
+        return 1;
+    }
     return 0;
 }
 
@@ -31,7 +31,7 @@ int LsBuiltins(char **tokens) {
     while ((entry = readdir(dir)) != NULL) {
         if (entry->d_name[0] == '.')
             continue;
-            
+
         printf("%s\n", entry->d_name);
     }
     closedir(dir);
