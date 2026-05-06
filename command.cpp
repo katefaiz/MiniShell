@@ -1,5 +1,5 @@
 #include "read.h"
-#include "builtins.h"
+#include "command.h"
 
 int EchoBuiltins(char **tokens) {
     for (int i = 1; tokens[i] != NULL; ++i) {
@@ -40,14 +40,13 @@ int LsBuiltins(char **tokens) {
 
 int PwdBuiltins(char **tokens) {
     char buffer[PATH_MAX];
-    getcwd(buffer, sizeof(buffer)); //возвращает путь к текущему рабочему каталогу.
+    getcwd(buffer, sizeof(buffer)); 
     printf("%s\n", buffer);
     return 0;
 
 }
 
 int ExitBuiltins(char **tokens) {
-    //printf("exit\n");
     exit(0);
 }
 
@@ -57,8 +56,8 @@ int TypeBuiltins(char **tokens) {
         return 1;
     }
     
-    for (int i = 0; builtins_table[i].cmd_name != NULL; i++) {
-        if (strcmp(tokens[1], builtins_table[i].cmd_name) == 0) {
+    for (int i = 0; commands_table[i].cmd_name != NULL; i++) {
+        if (strcmp(tokens[1], commands_table[i].cmd_name) == 0) {
             printf("%s is a shell builtin\n", tokens[1]);
             return 0;
         }
@@ -111,14 +110,59 @@ int ReadBuiltins(char **tokens) {
 
 //*----------------------------------------------------------------
 
-int ExecuteBuiltin(char **tokens) {
+void ReplaceArithmeticSubstitutions(char *buffer) {
+    size_t buf_size = strlen(buffer) + 1024;
+    char *new_buf = (char*)calloc(buf_size, 1);
+    if (!new_buf) {
+        fprintf(stderr, "memory allocation error\n");
+    }
+    char *out = new_buf;
+    char *in = buffer;
+
+    while (*in) {
+        if (strncmp(in, "$((", 3) == 0) {
+            char *close = strstr(in + 3, "))");
+            if (close) {
+
+                size_t expr_len = close - (in + 3);
+                char *expr = (char*)malloc(expr_len + 1);
+                strncpy(expr, in + 3, expr_len);
+                expr[expr_len] = '\0';
+
+                char *res = EvaluateArithmeticExpression(expr);
+                strcpy(out, res);
+                out += strlen(res);
+
+                free(res);
+                free(expr);
+                in = close + 2;
+
+                continue;
+            }
+        }
+        *out++ = *in++;
+    }
+    *out = '\0';
+    strcpy(buffer, new_buf);
+    free(new_buf);
+}
+
+int ExecuteCommands(char **tokens) {
     if (tokens == NULL || tokens[0] == NULL)
         return 0;
-    for (int i = 0; builtins_table[i].cmd_name != NULL; i++) {
-        if (strcmp(tokens[0], builtins_table[i].cmd_name) == 0)
-            return builtins_table[i].func(tokens);
+    if (strcmp(tokens[0], "!") == 0) {
+        if (tokens[1] == NULL) {
+            printf("!: missing argument\n");
+            return 1;
+        }
+        int res = ExecuteCommands(tokens + 1);
+        return (res == 0) ? 1 : 0;
     }
-    fprintf(stderr, "command not found: %s\n", tokens[0]);
+    for (int i = 0; commands_table[i].cmd_name != NULL; i++) {
+        if (strcmp(tokens[0], commands_table[i].cmd_name) == 0)
+            return commands_table[i].func(tokens);
+    }
+    printf("command not found: %s\n", tokens[0]);
     return 1;
 }
 

@@ -1,8 +1,8 @@
 #include <stdio.h>
 
-#include "read.h"
-#include "builtins.h"
 #include "arithmetic.h"
+#include "command.h"
+#include "read.h"
 #include "tools.h"
 
 int main() {
@@ -11,7 +11,7 @@ int main() {
 
     while (1) {
         char buffer[PATH_MAX];
-        getcwd(buffer, sizeof(buffer)); //возвращает путь к текущему рабочему каталогу.
+        getcwd(buffer, sizeof(buffer)); 
         printf(BLUE("%s :) "), buffer); 
 
         fflush(stdout);
@@ -26,6 +26,7 @@ int main() {
             break;
         }
 
+        ReplaceArithmeticSubstitutions(text.buffer);
         s = Fragmentation(&text);
         if (s != SUCCESS) {
             fprintf(stderr, "Fragmentation error\n");
@@ -34,7 +35,7 @@ int main() {
         }
 
         if (text.cnt_words > 0) {
-            ExecuteBuiltin(text.pointers_on_words);
+            ExecuteCommands(text.pointers_on_words);
         }
 
         TextDtor(&text);

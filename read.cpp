@@ -1,11 +1,4 @@
-#include <assert.h>
-#include <ctype.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "read.h"
-
 
 static void SkipSpaces(char** str) {
     assert(str != NULL);

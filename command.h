@@ -1,10 +1,10 @@
 #ifndef BUILTINS_H
 #define BUILTINS_H
-//TODO переименовать файл 
 
 #include "tools.h"
 #include "if_while.h"
 #include "test.h"
+#include "arithmetic.h"
 
 static const char *builtins_commands[] = {"echo", "cd", "ls", "pwd", "exit", "type", "true", "false", "read"};
 
@@ -18,14 +18,15 @@ int TrueBuiltins(char **tokens);
 int FalseBuiltins(char **tokens);
 int ReadBuiltins(char **tokens);
 
-int ExecuteBuiltin(char **tokens);
+void ReplaceArithmeticSubstitutions(char *buffer);
+int ExecuteCommands(char **tokens);
 
 typedef struct {
     const char *cmd_name;
     int (*func)(char **tokens);
-} BuiltinPair;
+} CommandsPair;
 
-static const BuiltinPair builtins_table[] = {
+static const CommandsPair commands_table[] = {
     {"echo", EchoBuiltins},
     {"cd", CdBuiltins},
     {"ls", LsBuiltins},
@@ -39,6 +40,7 @@ static const BuiltinPair builtins_table[] = {
     {"while", While},
     {"[", Test},
     {"test", Test},
+    {"((", ComparisonsArithmetic}, 
     {NULL, NULL}
 };
 #endif //BUILTINS

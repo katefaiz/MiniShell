@@ -4,21 +4,18 @@ static void SkipSpaces(const char **s) {
     while (**s && isspace(**s)) (*s)++;
 }
 
-//считывает число, перемещая указатель
-static int GetNumber(const char **s, int *val) {
+static int ParseNumber(const char **s, int *val) {
     SkipSpaces(s);
     char *end;
     *val = (int)strtol(*s, &end, 10);
-
-    if (*s == end) return 1;   
+    if (*s == end) return 0; //ничего не считано
     *s = end;
 
-    return 0;
+    return 1;
 }
 
-int EvaluateArithmetic(const char* expr) {
+static int EvaluateComparison(const char *expr) {
     if (!expr) return 0;
-
     const char *s = expr;
     int invert = 0;
 
@@ -29,18 +26,9 @@ int EvaluateArithmetic(const char* expr) {
         SkipSpaces(&s);
     }
 
-    if (*s != '(' || *(s+1) != '(') {
-        fprintf(stderr, "arithmetic: expected (( ... ))\n");
-        return 0;
-    }
-
-    s += 2;
-    SkipSpaces(&s);
-
-    int left, right = 0;
-    // Левый
-    if (GetNumber(&s, &left) == 1) {
-        fprintf(stderr, "arithmetic: left operand is not a number\n");
+    int left, right;
+    if (!ParseNumber(&s, &left)) {
+        printf("arithmetic: left operand is not a number\n");
         return 0;
     }
     SkipSpaces(&s);
@@ -64,27 +52,25 @@ int EvaluateArithmetic(const char* expr) {
     }
     else if (*s == '<') { 
         op[0] = '<'; 
-        s += 1; 
+        s ++; 
     }
     else if (*s == '>') { 
         op[0] = '>'; 
-        s += 1; 
+        s ++; 
     }
     else {
-        fprintf(stderr, "arithmetic: unknown operator\n");
+        printf("arithmetic: unknown operator\n");
         return 0;
     }
     SkipSpaces(&s);
 
-    // Правый 
-    if (GetNumber(&s, &right) == 1) {
-        fprintf(stderr, "arithmetic: right operand is not a number\n");
+    if (!ParseNumber(&s, &right)) {
+        printf("arithmetic: right operand is not a number\n");
         return 0;
     }
     SkipSpaces(&s);
-
-    if (*s != ')' || *(s+1) != ')') {
-        fprintf(stderr, "arithmetic: expected ))\n");
+    if (*s != '\0') {
+        printf("arithmetic: extra characters after expression\n");
         return 0;
     }
 
@@ -95,42 +81,100 @@ int EvaluateArithmetic(const char* expr) {
     else if (strcmp(op, ">") == 0)  result = (left > right);
     else if (strcmp(op, "<=") == 0) result = (left <= right);
     else if (strcmp(op, ">=") == 0) result = (left >= right);
-    else {
-        fprintf(stderr, "arithmetic: unknown operator %s\n", op);
-        result = 0;
-    }
+    else result = 0;
 
-    if (invert) result = !result;
-
-    return result;
+    return invert ? !result : result;
 }
 
-// int main() {
-//     char *line = NULL;
-//     size_t len = 0;
-//     ssize_t nread;
+
+int ComparisonsArithmetic(char **tokens) {
+    if (tokens[0] == NULL) return 1;
+    int last = 0;
+    while (tokens[last] != NULL) last++;
+    last--; //индекс последнего токена
+
+    if (strncmp(tokens[0], "((", 2) != 0) {
+        printf("ComparisonsArithmetic: expected (( ... ))\n");
+        return 1;
+    }
+    if (last < 1 || (strstr(tokens[last], "))") == NULL && strcmp(tokens[last], "))") != 0)) {
+        printf("ComparisonsArithmetic: missing closing ))\n");
+        return 1;
+    }
+
+    size_t expr_len = 0;
+    for (int i = 1; i < last; i++) {
+        expr_len += strlen(tokens[i]) + 1; 
+    }
+    char *expr = (char*)malloc(expr_len + 1);
+    if (!expr) {
+        fprintf(stderr, "memory allocation error\n");
+        return 1;
+    }
+    expr[0] = '\0';
+    for (int i = 1; i < last; i++) {
+        strcat(expr, tokens[i]);
+        if (i < last - 1) strcat(expr, " ");
+    }
+    int res = EvaluateComparison(expr);
+    free(expr);
+
+    return res ? 0 : 1; 
+}
+
+//*--------------------------------------------------------------
+
+char* EvaluateArithmeticExpression(const char *expr) {
+    const char *s = expr;
+    int left, right;
+    if (!ParseNumber(&s, &left)) {
+        printf("arithmetic: invalid left operand in %s\n", expr);
+        return strdup("0");
+    }
+    SkipSpaces(&s);
+    if (!*s) {
+        printf("arithmetic: missing operator in %s\n", expr);
+        return strdup("0");
+    }
+    char op = *s;
+    if (op != '+' && op != '-' && op != '*' && op != '/' && op != '%') {
+        printf("arithmetic: unknown operator '%c' in %s\n", op, expr);
+        return strdup("0");
+    }
+    s++;
+    if (!ParseNumber(&s, &right)) {
+        printf("arithmetic: invalid right operand in %s\n", expr);
+        return strdup("0");
+    }
+    SkipSpaces(&s);
+    if (*s != '\0') {
+        printf("arithmetic: extra characters in %s\n", expr);
+        return strdup("0");
+    }
+
+    int result = 0;
+    switch (op) {
+        case '+': 
+            result = left + right; 
+            break;
+        case '-': 
+            result = left - right; 
+            break;
+        case '*': 
+            result = left * right; 
+            break;
+        case '/': 
+            result = left / right;
+            break;
+        case '%': 
+            result = left % right; 
+            break;
+        default: return strdup("0");
+    }
+    char *res_str = (char*)malloc(16);
+    if (!res_str) return strdup("0");
+    snprintf(res_str, 16, "%d", result);
+    return res_str;
+}
 
 
-//     while (1) {
-//         printf("> ");
-//         fflush(stdout);
-
-//         nread = getline(&line, &len, stdin);
-//         if (nread == -1) {  
-//             printf("\n");
-//             break;
-//         }
-
-//         if (nread > 0 && line[nread - 1] == '\n')
-//             line[nread - 1] = '\0';
-
-//         if (strlen(line) == 0)
-//             continue;
-
-//         int result = EvaluateArithmetic(line);
-//         printf("%d\n", result);
-//     }
-
-//     free(line);
-//     return 0;
-// }

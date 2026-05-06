@@ -1,11 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <unistd.h>
-
-#include "builtins.h"
 #include "if_while.h"
+#include "command.h"
 
 static int FindToken(char **tokens, const char *target, int start) {
     for (int i = start; tokens[i] != NULL; ++i) {
@@ -28,7 +22,7 @@ int If(char **tokens) {
 
     tokens[then_idx] = NULL;
     
-    int cond_res = ExecuteBuiltin(&tokens[1]); 
+    int cond_res = ExecuteCommands(&tokens[1]); 
     
     tokens[then_idx] = (char*)"then";
 
@@ -37,12 +31,12 @@ int If(char **tokens) {
         char *saved_token = tokens[end_block];
         
         tokens[end_block] = NULL;
-        ExecuteBuiltin(&tokens[then_idx + 1]);
+        ExecuteCommands(&tokens[then_idx + 1]);
         tokens[end_block] = saved_token; 
     } 
     else if (else_idx != -1) {
         tokens[fi_idx] = NULL;
-        ExecuteBuiltin(&tokens[else_idx + 1]);
+        ExecuteCommands(&tokens[else_idx + 1]);
         tokens[fi_idx] = (char*)"fi";
     }
 
@@ -60,13 +54,13 @@ int While(char **tokens) {
 
     while (1) {
         tokens[do_idx] = NULL;
-        int cond_res = ExecuteBuiltin(&tokens[1]);
+        int cond_res = ExecuteCommands(&tokens[1]);
         tokens[do_idx] = (char*)"do";
 
         if (cond_res != 0) break; 
 
         tokens[done_idx] = NULL;
-        ExecuteBuiltin(&tokens[do_idx + 1]);
+        ExecuteCommands(&tokens[do_idx + 1]);
         tokens[done_idx] = (char*)"done";
     }
 

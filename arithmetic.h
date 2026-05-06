@@ -3,6 +3,8 @@
 
 #include "tools.h"
 
-int EvaluateArithmetic(const char* expr);
+int ComparisonsArithmetic(char **tokens);
 
-#endif
+char* EvaluateArithmeticExpression(const char *expr);
+
+#endif //ARITHMETIC_H
