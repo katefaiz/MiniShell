@@ -109,32 +109,32 @@ int EvaluateArithmetic(const char* expr) {
     return result;
 }
 
-int main() {
-    char *line = NULL;
-    size_t len = 0;
-    ssize_t nread;
+// int main() {
+//     char *line = NULL;
+//     size_t len = 0;
+//     ssize_t nread;
 
 
-    while (1) {
-        printf("> ");
-        fflush(stdout);
+//     while (1) {
+//         printf("> ");
+//         fflush(stdout);
 
-        nread = getline(&line, &len, stdin);
-        if (nread == -1) {  
-            printf("\n");
-            break;
-        }
+//         nread = getline(&line, &len, stdin);
+//         if (nread == -1) {  
+//             printf("\n");
+//             break;
+//         }
 
-        if (nread > 0 && line[nread - 1] == '\n')
-            line[nread - 1] = '\0';
+//         if (nread > 0 && line[nread - 1] == '\n')
+//             line[nread - 1] = '\0';
 
-        if (strlen(line) == 0)
-            continue;
+//         if (strlen(line) == 0)
+//             continue;
 
-        int result = EvaluateArithmetic(line);
-        printf("%d\n", result);
-    }
+//         int result = EvaluateArithmetic(line);
+//         printf("%d\n", result);
+//     }
 
-    free(line);
-    return 0;
-}
+//     free(line);
+//     return 0;
+// }

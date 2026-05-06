@@ -54,15 +54,6 @@ void InitEnv(void) {
 void Output(const char *buf, int len) {
     assert(buf);
 
-    char input[DEFAULT_BIG_BUF_SIZE] = {};
-    printf("%s :) ", getenv("PWD"));
-    fgets(input, sizeof(input), stdin);
-
-    if (strncmp(input, "cd ", 3) == 0) {
-        input[strcspn(input, "\n")] = '\0';
-        ShellCD(input + 3);
-    }
-
     // тут надо будет вставить логику работы нашего терминала, всякие приветствия, выводы команд и прочее
     fwrite(buf, 1, len, stdout);
     fflush(stdout);
@@ -79,7 +70,7 @@ int main() {
     pid_t pid = forkpty(&master_fd, NULL, NULL, NULL);
 
     if (pid == 0) {
-        execl("/bin/bash", "bash", NULL); // TODO: тут потом заменю путь
+        execl("./minishell", "bash", NULL); // TODO: тут потом заменю путь
         exit(1);
 
 }

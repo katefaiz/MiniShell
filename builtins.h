@@ -1,6 +1,6 @@
 #ifndef BUILTINS_H
 #define BUILTINS_H
-
+//TODO переименовать файл 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,8 +11,10 @@
 #include <limits.h>
 #include <sys/stat.h>
 
+#include "if_while.h"
+#include "test.h"
 
-const char *builtins_commands[] = {"echo", "cd", "ls", "pwd", "exit", "type", "true", "false", "read"};
+static const char *builtins_commands[] = {"echo", "cd", "ls", "pwd", "exit", "type", "true", "false", "read"};
 
 int EchoBuiltins(char **tokens);
 int CdBuiltins(char **tokens);
@@ -31,7 +33,7 @@ typedef struct {
     int (*func)(char **tokens);
 } BuiltinPair;
 
-BuiltinPair builtins_table[] = {
+static const BuiltinPair builtins_table[] = {
     {"echo", EchoBuiltins},
     {"cd", CdBuiltins},
     {"ls", LsBuiltins},
@@ -41,6 +43,10 @@ BuiltinPair builtins_table[] = {
     {"true", TrueBuiltins},
     {"false", FalseBuiltins},
     {"read", ReadBuiltins},
+    {"if", If},
+    {"while", While},
+    {"[", Test},
+    {"test", Test},
     {NULL, NULL}
 };
 #endif //BUILTINS

@@ -1,17 +1,44 @@
 #include <stdio.h>
 
 #include "read.h"
+#include "builtins.h"
+#include "arithmetic.h"
 
 
 int main() {
+    about_text text;
+    status s;
 
-    while (true) {
-        about_text text = {};
-        Read(&text, stdin);
-        Fragmentation(&text);
+    while (1) {
+        // printf("%s :) ", getenv("PWD"));
+        char buffer[PATH_MAX];
+        getcwd(buffer, sizeof(buffer)); //возвращает путь к текущему рабочему каталогу.
+        printf("%s :) ", buffer); 
+         
+        fflush(stdout);
 
-        for (int i = 0; i < text.cnt_words; ++i)
-            fprintf(stdout, "'%s'\n", text.pointers_on_words[i]);
+        s = Read(&text, stdin);
+        if (s == READ_ERROR) { 
+            printf("\n");
+            break;
+        }
+        if (s != SUCCESS) {
+            fprintf(stderr, "Read error\n");
+            break;
+        }
+
+        s = Fragmentation(&text);
+        if (s != SUCCESS) {
+            fprintf(stderr, "Fragmentation error\n");
+            TextDtor(&text);
+            continue;
+        }
+
+        if (text.cnt_words > 0) {
+            ExecuteBuiltin(text.pointers_on_words);
+        }
+
+        TextDtor(&text);
     }
 
     return 0;
