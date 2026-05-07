@@ -3,73 +3,62 @@
 #else
   #include <pty.h>
 #endif
+#include <termios.h>
 
 #include "tools.h"
+#include "subsidiary.h"
 
-#define DEFAULT_BIG_BUF_SIZE    1024
-#define DEFAULT_MIDDLE_BUF_SIZE 256
-#define DEFAULT_SMALL_BUF_SIZE  16
+struct termios orig_termios;
 
 void InitSHLVL(void) {
     char *shlvl = getenv("SHLVL");
     int level = shlvl ? atoi(shlvl) + 1 : 1;
 
-    char buf[DEFAULT_SMALL_BUF_SIZE] = {};
+    INIT_BUFFER(buf, DEFAULT_SMALL_BUF_SIZE);
     snprintf(buf, sizeof(buf), "%d", level);
     setenv("SHLVL", buf, 1);
 }
 
-void ShellCD(const char *path) {
-    assert(path); // TODO: красивый if  с выводом некорректного пути
+void EnableRawMode(void) {
+    tcgetattr(STDIN_FILENO, &orig_termios);
+    struct termios raw = orig_termios;
 
-    char *old = getenv("PWD");
-    if (old) {
-        setenv("OLDPWD", old, 1);
-
-        if (chdir(path) == 0) {
-            char cwd[DEFAULT_BIG_BUF_SIZE] = {};
-            getcwd(cwd, sizeof(cwd));
-            setenv("PWD", cwd, 1);
-        } else {
-            perror("cd"); // TODO: аналогично красивый вывод ошибки
-        }
-    }
-
+    cfmakeraw(&raw);
+    tcsetattr(STDIN_FILENO, TCSANOW, &raw);
 }
-void InitEnv(void) {
-    InitSHLVL();
-    
-    if (!getenv("PWD")) {
-        char cwd[DEFAULT_BIG_BUF_SIZE] = {};
-        getcwd(cwd, sizeof(cwd));
-        setenv("PWD", cwd, 1);
-    }
+
+void DisableRawMode(void) {
+    tcsetattr(STDIN_FILENO, TCSANOW, &orig_termios);
 }
 
 void Output(const char *buf, int len) {
-    assert(buf);
+    if (!buf) {
+        fprintf(stderr, RED("Error: buf NULL pointer.\n"));
+        return;
+    }
 
-    // тут надо будет вставить логику работы нашего терминала, всякие приветствия, выводы команд и прочее
     fwrite(buf, 1, len, stdout);
     fflush(stdout);
 }
 
-void Exit(void) {
-    printf(GREEN("\n[shell завершен]\n"));
-}
+int main(void) {
+    InitSHLVL();
 
-int main() {
-    InitEnv();
+    if (!getenv("PWD")) {
+        INIT_BUFFER(cwd, PATH_MAX);
+        getcwd(cwd, sizeof(cwd));
+        setenv("PWD", cwd, 1);
+    }
+
+    EnableRawMode();
     int master_fd = 0;
-
     pid_t pid = forkpty(&master_fd, NULL, NULL, NULL);
-
     if (pid == 0) {
-        execl("./minishell", "bash", NULL); // TODO: тут потом заменю путь
+        execl("./minishell", "minishell", NULL);
         exit(1);
+    }
 
-}
-    char buf[DEFAULT_MIDDLE_BUF_SIZE] = {};
+    INIT_BUFFER(buf, DEFAULT_MIDDLE_BUF_SIZE);
     ssize_t n = 0;
 
     while (true) {
@@ -95,6 +84,7 @@ int main() {
     }
 
     waitpid(pid, NULL, 0);
-    Exit();
+    DisableRawMode();
+    PrintExit();
     return 0;
 }

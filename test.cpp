@@ -1,6 +1,12 @@
 #include "test.h"
+#include "read.h"
 
 int Test(char **tokens) {
+    if (!tokens || !*tokens) {
+        fprintf(stderr, RED("Error: tokens pointer is NULL.\n"));
+        return NULL_ERROR;
+    }
+    
     int argc = 0;
     while (tokens[argc] != NULL) 
         argc++;

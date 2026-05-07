@@ -13,7 +13,8 @@ enum status {
     STAT_ERROR            = 2,
     NOT_ENOUGH_MEMORY     = 3,
     READ_ERROR            = 4,
-    CLOSE_ERROR           = 5
+    CLOSE_ERROR           = 5,
+    NULL_ERROR            = 6
 };
 
 

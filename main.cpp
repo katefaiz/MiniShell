@@ -4,8 +4,11 @@
 #include "command.h"
 #include "read.h"
 #include "tools.h"
+#include "subsidiary.h"
 
 int main() {
+    PrintGreeting();
+
     about_text text;
     status s;
 
@@ -18,18 +21,19 @@ int main() {
 
         s = Read(&text, stdin);
         if (s == READ_ERROR) { 
-            printf("\n");
+            printf(RED("Error: read failed.\n"));
             break;
         }
         if (s != SUCCESS) {
-            fprintf(stderr, "Read error\n");
+            fprintf(stderr, RED("Error: read failed.\n"));
             break;
         }
 
+        ReplaceVariables(text.buffer);
         ReplaceArithmeticSubstitutions(text.buffer);
         s = Fragmentation(&text);
         if (s != SUCCESS) {
-            fprintf(stderr, "Fragmentation error\n");
+            fprintf(stderr, RED("Error: fragmentation failed.\n"));
             TextDtor(&text);
             continue;
         }
@@ -40,6 +44,6 @@ int main() {
 
         TextDtor(&text);
     }
-
+    
     return 0;
 }

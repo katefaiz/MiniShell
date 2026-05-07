@@ -1,23 +1,34 @@
 #include "read.h"
 
 static void SkipSpaces(char** str) {
-    assert(str != NULL);
-    assert(*str != NULL);
+    if (!str || !*str) {
+        fprintf(stderr, RED("Error: str NULL poiner.\n"));
+        return;
+    }
 
     while (**str != '\0' && isspace(**str))
         (*str)++;
 }
 
 static void SkipWord(char** str) {
-    assert(str != NULL);
-    assert(*str != NULL);
+    if (!str || !*str) {
+        fprintf(stderr, RED("Error: str NULL poiner.\n"));
+        return;
+    }
 
     while (**str != '\0' && !isspace(**str))
         (*str)++;
 }
 
 static char* ResizeBuffer(char* buffer, size_t* capacity) {
-    assert(buffer);
+    if (!buffer) {
+        fprintf(stderr, RED("Error: buffer NULL pointer.\n"));
+        return NULL;
+    }
+    if (!capacity) {
+        fprintf(stderr, RED("Error: capacity NULL pointer.\n"));
+        return NULL;
+    }
 
     *capacity *= REALLOC_COEFF;
     char* new_buf = (char*)realloc(buffer, *capacity);
@@ -31,8 +42,14 @@ static char* ResizeBuffer(char* buffer, size_t* capacity) {
 }
 
 status Read(about_text *text, FILE* file) {
-    assert(text != NULL);
-    assert(file != NULL);
+    if (!text) {
+        fprintf(stderr, RED("Error: text NULL pointer.\n"));
+        return NULL_ERROR;
+    }
+    if (!file) {
+        fprintf(stderr, RED("Error: file NULL pointer.\n"));
+        return NULL_ERROR;
+    }
 
     text->size = 0;
     text->capacity = START_CAPACITY;
@@ -74,8 +91,14 @@ status Read(about_text *text, FILE* file) {
 }
 
 status Fragmentation(about_text *text) {
-    assert(text != NULL);
-    assert(text->buffer != NULL);
+    if (!text) {
+        fprintf(stderr, RED("Error: text NULL pointer.\n"));
+        return NULL_ERROR;
+    }
+    if (!text->buffer) {
+        fprintf(stderr, RED("Error: text->buffer NULL pointer.\n"));
+        return NULL_ERROR;
+    }
 
     text->cnt_words = 0;
     char* ptr = text->buffer;

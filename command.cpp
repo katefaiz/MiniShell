@@ -2,6 +2,11 @@
 #include "command.h"
 
 int EchoBuiltins(char **tokens) {
+    if (!tokens || !*tokens) {
+        fprintf(stderr, RED("Error: tokens pointer is NULL.\n"));
+        return NULL_ERROR;
+    }
+    
     for (int i = 1; tokens[i] != NULL; ++i) {
         printf("%s", tokens[i]);
         if (tokens[i+1] != NULL)
@@ -13,18 +18,36 @@ int EchoBuiltins(char **tokens) {
 }
 
 int CdBuiltins(char **tokens) {
+    if (!tokens || !*tokens) {
+        fprintf(stderr, RED("Error: tokens pointer is NULL.\n"));
+        return NULL_ERROR;
+    }
+
     const char* path = tokens[1];
     if (path == NULL) {
         path = getenv("HOME");
     }
+
+    char *old = getenv("PWD");
+    if (old) setenv("OLDPWD", old, 1);
+
     if (chdir(path) != 0) {
-        printf(RED("No such file or directory\n"));
+        printf(RED("Error: no such file or directory\n"));
         return 1;
     }
+
+    char cwd[PATH_MAX] = {};
+    getcwd(cwd, sizeof(cwd));
+    setenv("PWD", cwd, 1);
     return 0;
 }
 
 int LsBuiltins(char **tokens) {
+    if (!tokens || !*tokens) {
+        fprintf(stderr, RED("Error: tokens pointer is NULL.\n"));
+        return NULL_ERROR;
+    }
+
     const char *dir_path = tokens[1] ? tokens[1] : ".";
     DIR *dir = opendir(dir_path);
     struct dirent *entry;
@@ -39,6 +62,11 @@ int LsBuiltins(char **tokens) {
 }
 
 int PwdBuiltins(char **tokens) {
+    if (!tokens || !*tokens) {
+        fprintf(stderr, RED("Error: tokens pointer is NULL.\n"));
+        return NULL_ERROR;
+    }
+
     char buffer[PATH_MAX];
     getcwd(buffer, sizeof(buffer)); 
     printf("%s\n", buffer);
@@ -47,12 +75,21 @@ int PwdBuiltins(char **tokens) {
 }
 
 int ExitBuiltins(char **tokens) {
+    if (!tokens || !*tokens) {
+        fprintf(stderr, RED("Error: tokens pointer is NULL.\n"));
+        return NULL_ERROR;
+    }
     exit(0);
 }
 
 int TypeBuiltins(char **tokens) {
+    if (!tokens || !*tokens) {
+        fprintf(stderr, RED("Error: tokens pointer is NULL.\n"));
+        return NULL_ERROR;
+    }
+
     if (tokens[1] == NULL) {
-        fprintf(stderr, "type: missing argument\n");
+        fprintf(stderr, "Error type: missing argument.\n");
         return 1;
     }
     
@@ -89,14 +126,27 @@ int TypeBuiltins(char **tokens) {
 }
 
 int TrueBuiltins(char **tokens) {
+    if (!tokens || !*tokens) {
+        fprintf(stderr, RED("Error: tokens pointer is NULL.\n"));
+        return NULL_ERROR;
+    }
     return 0;
 }
 
 int FalseBuiltins(char **tokens) {
+    if (!tokens || !*tokens) {
+        fprintf(stderr, RED("Error: tokens pointer is NULL.\n"));
+        return NULL_ERROR;
+    }
     return 1;
 }
 
 int ReadBuiltins(char **tokens) {
+    if (!tokens || !*tokens) {
+        fprintf(stderr, RED("Error: tokens pointer is NULL.\n"));
+        return NULL_ERROR;
+    }
+
     char *line = NULL;
     size_t len = 0;
     ssize_t nread = getline(&line, &len, stdin);
@@ -109,12 +159,59 @@ int ReadBuiltins(char **tokens) {
 }
 
 //*----------------------------------------------------------------
+void ReplaceVariables(char *buffer) {
+    if (!buffer) {
+        fprintf(stderr, RED("Error: nothing is in a buffer.\n"));
+        return;
+    }
+
+    size_t buf_size = strlen(buffer) + DEFAULT_BIG_BUF_SIZE;
+    char *new_buf = (char *) calloc (buf_size, 1);
+    if (!new_buf) {
+        fprintf(stderr, RED("Error: memory allocation failed.\n"));
+        return;
+    }
+
+    char *out = new_buf;
+    char *in = buffer;
+
+    while (*in) {
+        if (*in == '$' && *(in + 1) != '(' && *(in + 1) != '\0') {
+            in++;
+            INIT_BUFFER(var_name, DEFAULT_MIDDLE_BUF_SIZE);
+            int j = 0;
+
+            while (*in && (isalnum((unsigned char)*in) || *in == '_')) {
+                var_name[j++] = *in++;
+            }
+            var_name[j] = '\0';
+
+            char *val = getenv(var_name);
+            if (val) {
+                strcpy(out, val);
+                out += strlen(val);
+            }
+            continue;
+        }
+
+        *out++ = *in++;
+    }
+
+    *out = '\0';
+    strcpy(buffer, new_buf);
+    free(new_buf);
+}
 
 void ReplaceArithmeticSubstitutions(char *buffer) {
+    if (!buffer) {
+        fprintf(stderr, RED("Error: nothing is in a buffer.\n"));
+        return;
+    }
+
     size_t buf_size = strlen(buffer) + 1024;
     char *new_buf = (char*)calloc(buf_size, 1);
     if (!new_buf) {
-        fprintf(stderr, "memory allocation error\n");
+        fprintf(stderr, RED("Error: memory allocation failed.\n"));
     }
     char *out = new_buf;
     char *in = buffer;
@@ -148,8 +245,11 @@ void ReplaceArithmeticSubstitutions(char *buffer) {
 }
 
 int ExecuteCommands(char **tokens) {
-    if (tokens == NULL || tokens[0] == NULL)
-        return 0;
+    if (!tokens || !*tokens) {
+        fprintf(stderr, RED("Error: tokens pointer is NULL.\n"));
+        return NULL_ERROR;
+    }
+
     if (strcmp(tokens[0], "!") == 0) {
         if (tokens[1] == NULL) {
             printf("!: missing argument\n");
@@ -158,11 +258,34 @@ int ExecuteCommands(char **tokens) {
         int res = ExecuteCommands(tokens + 1);
         return (res == 0) ? 1 : 0;
     }
+
     for (int i = 0; commands_table[i].cmd_name != NULL; i++) {
-        if (strcmp(tokens[0], commands_table[i].cmd_name) == 0)
+        if (strcmp(tokens[0], commands_table[i].cmd_name) == 0) {
             return commands_table[i].func(tokens);
+        }
     }
-    printf("command not found: %s\n", tokens[0]);
+
+    pid_t pid = fork(); // тут проверка вызова файла (из разряда ./ququ)
+    if (pid == 0) {
+        if (execvp(tokens[0], tokens) == -1) {
+            printf(RED("Error: command not found: %s :((\n"), tokens[0]);
+            exit(127);
+        }
+
+    } else if (pid < 0) {
+        perror("fork");
+        return 1;
+
+    } else {
+        int status = 0;
+        waitpid(pid, &status, 0);
+        
+        if (WIFEXITED(status)) {
+            return WEXITSTATUS(status);
+        }
+    }
+
+    printf(RED("Error: command not found: %s :((\n"), tokens[0]);
     return 1;
 }
 

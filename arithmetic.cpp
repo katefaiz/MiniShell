@@ -1,10 +1,24 @@
 #include "arithmetic.h"
+#include "read.h"
+#include "tools.h"
 
 static void SkipSpaces(const char **s) {
+    if (!s || !*s) {
+        fprintf(stderr, RED("Error: s NULL pointer.\n"));
+        return;
+    }
     while (**s && isspace(**s)) (*s)++;
 }
 
 static int ParseNumber(const char **s, int *val) {
+    if (!s || !*s) {
+        fprintf(stderr, RED("Error: s NULL pointer.\n"));
+        return NULL_ERROR;
+    }
+    if (!val) {
+        fprintf(stderr, RED("Error: val NULL pointer.\n"));
+        return NULL_ERROR;
+    }
     SkipSpaces(s);
     char *end;
     *val = (int)strtol(*s, &end, 10);
@@ -88,7 +102,11 @@ static int EvaluateComparison(const char *expr) {
 
 
 int ComparisonsArithmetic(char **tokens) {
-    if (tokens[0] == NULL) return 1;
+    if (!tokens || !*tokens) {
+        fprintf(stderr, RED("Error: tokens pointer is NULL.\n"));
+        return NULL_ERROR;
+    }
+    //if (tokens[0] == NULL) return 1;
     int last = 0;
     while (tokens[last] != NULL) last++;
     last--; //индекс последнего токена
@@ -125,6 +143,10 @@ int ComparisonsArithmetic(char **tokens) {
 //*--------------------------------------------------------------
 
 char* EvaluateArithmeticExpression(const char *expr) {
+    if (!expr) {
+        fprintf(stderr, RED("Error: expr pointer is NULL.\n"));
+        return NULL;
+    }
     const char *s = expr;
     int left, right;
     if (!ParseNumber(&s, &left)) {

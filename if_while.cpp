@@ -1,7 +1,17 @@
 #include "if_while.h"
 #include "command.h"
+#include "read.h"
 
 static int FindToken(char **tokens, const char *target, int start) {
+    if (!tokens || !*tokens) {
+        fprintf(stderr, RED("Error: tokens pointer is NULL.\n"));
+        return NULL_ERROR;
+    }
+    if (!target) {
+        fprintf(stderr, RED("Error: target NULL pointer.\n"));
+        return NULL_ERROR;
+    }
+
     for (int i = start; tokens[i] != NULL; ++i) {
         if (strcmp(tokens[i], target) == 0) 
             return i;
@@ -11,12 +21,17 @@ static int FindToken(char **tokens, const char *target, int start) {
 }
 
 int If(char **tokens) {
+    if (!tokens || !*tokens) {
+        fprintf(stderr, RED("Error: tokens pointer is NULL.\n"));
+        return NULL_ERROR;
+    }
+
     int then_idx = FindToken(tokens, "then", 1);
     int fi_idx = FindToken(tokens, "fi", 1);
     int else_idx = FindToken(tokens, "else", 1);
 
     if (then_idx == -1 || fi_idx == -1) {
-        fprintf(stderr, "syntax error: missing then/fi\n");
+        fprintf(stderr, RED("Syntax error: missing then/fi.\n"));
         return 1;
     }
 
@@ -44,11 +59,16 @@ int If(char **tokens) {
 }
 
 int While(char **tokens) {
+    if (!tokens || !*tokens) {
+        fprintf(stderr, RED("Error: tokens pointer is NULL.\n"));
+        return NULL_ERROR;
+    }
+
     int do_idx = FindToken(tokens, "do", 1);
     int done_idx = FindToken(tokens, "done", 1);
 
     if (do_idx == -1 || done_idx == -1) {
-        fprintf(stderr, "syntax error: missing do/done\n");
+        fprintf(stderr, RED("Syntax error: missing do/done\n"));
         return 1;
     }
 

@@ -18,6 +18,7 @@ int TrueBuiltins(char **tokens);
 int FalseBuiltins(char **tokens);
 int ReadBuiltins(char **tokens);
 
+void ReplaceVariables(char *buffer);
 void ReplaceArithmeticSubstitutions(char *buffer);
 int ExecuteCommands(char **tokens);
 
