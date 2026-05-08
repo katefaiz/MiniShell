@@ -1,6 +1,6 @@
 #!/bin/bash
 
-g++ main.cpp arithmetic.cpp read.cpp command.cpp if_while.cpp test.cpp subsidiary.cpp -o minishell
+g++ main.cpp arithmetic.cpp read.cpp command.cpp if_while.cpp test.cpp subsidiary.cpp variables.cpp -o minishell
 g++ launch.cpp subsidiary.cpp -o launch
 
 ./launch

@@ -28,9 +28,7 @@ int main() {
             fprintf(stderr, RED("Error: read failed.\n"));
             break;
         }
-
-        ReplaceVariables(text.buffer);
-        ReplaceArithmeticSubstitutions(text.buffer);
+        
         s = Fragmentation(&text);
         if (s != SUCCESS) {
             fprintf(stderr, RED("Error: fragmentation failed.\n"));

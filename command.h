@@ -38,10 +38,22 @@ static const CommandsPair commands_table[] = {
     {"false", FalseBuiltins},
     {"read", ReadBuiltins},
     {"if", If},
+    {"elif", If},
     {"while", While},
     {"[", Test},
     {"test", Test},
     {"((", ComparisonsArithmetic}, 
     {NULL, NULL}
 };
+
+static const int MAX_CNT_VARIABLES = 256;
+
+typedef struct {
+    char* name;
+    char* value;
+} OneVariable;
+
+static OneVariable variables[MAX_CNT_VARIABLES];
+static int variables_count = 0;
+
 #endif //BUILTINS

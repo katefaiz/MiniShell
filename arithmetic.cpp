@@ -1,6 +1,7 @@
 #include "arithmetic.h"
 #include "read.h"
 #include "tools.h"
+#include "variables.h"
 
 static void SkipSpaces(const char **s) {
     if (!s || !*s) {
@@ -19,7 +20,23 @@ static int ParseNumber(const char **s, int *val) {
         fprintf(stderr, RED("Error: val NULL pointer.\n"));
         return NULL_ERROR;
     }
+
     SkipSpaces(s);
+
+    if (isalpha(**s) || **s == '_') {
+        char name[64] = {};
+        int i = 0;
+        
+        while (**s && (isalnum(**s) || **s == '_') && i < 63)
+            name[i++] = *(*s)++;
+        name[i] = '\0';
+
+        const char *v = GetVariable(name); 
+        *val = v ? atoi(v) : 0; 
+        
+        return 1;
+    }
+
     char *end;
     *val = (int)strtol(*s, &end, 10);
     if (*s == end) return 0; //ничего не считано

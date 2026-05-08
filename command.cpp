@@ -1,5 +1,6 @@
 #include "read.h"
 #include "command.h"
+#include "variables.h"
 
 int EchoBuiltins(char **tokens) {
     if (!tokens || !*tokens) {
@@ -48,14 +49,42 @@ int LsBuiltins(char **tokens) {
         return NULL_ERROR;
     }
 
-    const char *dir_path = tokens[1] ? tokens[1] : ".";
+    int show_all = 0;
+    const char *dir_path = ".";
+    for (int i = 1; tokens[i] != NULL; ++i) {
+        if (strcmp(tokens[i], "-a") == 0) {
+            show_all = 1;
+        } else if (tokens[i][0] == '-') {
+            continue; //игнорим другие опции
+        } else {
+            dir_path = tokens[i];
+            break;
+        }
+    }
+
     DIR *dir = opendir(dir_path);
-    struct dirent *entry;
+    dirent *entry;
+    struct stat st;
+    char full_path[PATH_MAX];
+
     while ((entry = readdir(dir)) != NULL) {
-        if (entry->d_name[0] == '.')
+        if (!show_all && entry->d_name[0] == '.')
             continue;
 
-        printf("%s\n", entry->d_name);
+        snprintf(full_path, sizeof(full_path), "%s/%s", dir_path, entry->d_name);
+
+        if (stat(full_path, &st) == -1) {
+            printf("%s\n", entry->d_name);
+            continue;
+        }
+
+        if (S_ISDIR(st.st_mode)) {
+            printf(BLUE("%s\n"), entry->d_name);
+        } else if (access(full_path, X_OK) == 0) {
+            printf(GREEN("%s\n"), entry->d_name);
+        } else {
+            printf("%s\n", entry->d_name);
+        }
     }
     closedir(dir);
     return 0;
@@ -186,7 +215,7 @@ void ReplaceVariables(char *buffer) {
             }
             var_name[j] = '\0';
 
-            char *val = getenv(var_name);
+            char *val = (char*)GetVariable(var_name);
             if (val) {
                 strcpy(out, val);
                 out += strlen(val);
@@ -250,25 +279,76 @@ int ExecuteCommands(char **tokens) {
         return NULL_ERROR;
     }
 
-    if (strcmp(tokens[0], "!") == 0) {
-        if (tokens[1] == NULL) {
+    if (strcmp(tokens[0], "while") == 0) return While(tokens);
+    if (strcmp(tokens[0], "if") == 0) return If(tokens);
+
+    for (int i = 0; tokens[i] != NULL; ++i) {
+        if (strcmp(tokens[i], ";") == 0 || strcmp(tokens[i], "\\") == 0) {
+            char* saved_token = tokens[i];
+            tokens[i] = NULL;
+
+            ExecuteCommands(tokens);
+            int res = ExecuteCommands(tokens + i + 1);
+
+            tokens[i] = saved_token;
+            return res;
+
+        }
+    }
+
+    char full_cmd[DEFAULT_BIG_BUF_SIZE] = {};
+    for (int i = 0; tokens[i] != NULL; ++i) {
+        strcat(full_cmd, tokens[i]);
+        if (tokens[i + 1] != NULL) 
+            strcat(full_cmd, " ");
+    }
+
+    ReplaceVariables(full_cmd);
+    ReplaceArithmeticSubstitutions(full_cmd);
+
+    about_text temp_text = {};
+    temp_text.buffer = strdup(full_cmd);
+    Fragmentation(&temp_text);
+    char** final_tokens = temp_text.pointers_on_words;
+
+    if (final_tokens == NULL || final_tokens[0] == NULL) {
+        if (temp_text.buffer) 
+            free(temp_text.buffer);
+            
+        return 0;
+    }
+
+    char* eq_pos = strchr(final_tokens[0], '=');
+    if (eq_pos != NULL) {
+        char* line = strdup(final_tokens[0]);
+        char* internal_eq = strchr(line, '=');
+        *internal_eq = '\0';
+        
+        AddVariable(line, internal_eq + 1);
+        
+        free(line);
+        return 0;
+    }
+
+    if (strcmp(final_tokens[0], "!") == 0) {
+        if (final_tokens[1] == NULL) {
             printf("!: missing argument\n");
             return 1;
         }
-        int res = ExecuteCommands(tokens + 1);
+        int res = ExecuteCommands(final_tokens + 1);
         return (res == 0) ? 1 : 0;
     }
 
-    for (int i = 0; commands_table[i].cmd_name != NULL; i++) {
-        if (strcmp(tokens[0], commands_table[i].cmd_name) == 0) {
-            return commands_table[i].func(tokens);
+    for (int i = 0; commands_table[i].cmd_name != NULL; ++i) {
+        if (strcmp(final_tokens[0], commands_table[i].cmd_name) == 0) {
+            return commands_table[i].func(final_tokens);
         }
     }
 
     pid_t pid = fork(); // тут проверка вызова файла (из разряда ./ququ)
     if (pid == 0) {
-        if (execvp(tokens[0], tokens) == -1) {
-            fprintf(stderr, RED("Error: command not found: %s :((\n"), tokens[0]);
+        if (execvp(final_tokens[0], final_tokens) == -1) {
+            fprintf(stderr, RED("Error: command not found: %s :((\n"), final_tokens[0]);
             exit(127);
         }
 
