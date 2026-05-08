@@ -48,14 +48,42 @@ int LsBuiltins(char **tokens) {
         return NULL_ERROR;
     }
 
-    const char *dir_path = tokens[1] ? tokens[1] : ".";
+    int show_all = 0;
+    const char *dir_path = ".";
+    for (int i = 1; tokens[i] != NULL; ++i) {
+        if (strcmp(tokens[i], "-a") == 0) {
+            show_all = 1;
+        } else if (tokens[i][0] == '-') {
+            continue; //игнорим другие опции
+        } else {
+            dir_path = tokens[i];
+            break;
+        }
+    }
+
     DIR *dir = opendir(dir_path);
-    struct dirent *entry;
+    dirent *entry;
+    struct stat st;
+    char full_path[PATH_MAX];
+
     while ((entry = readdir(dir)) != NULL) {
-        if (entry->d_name[0] == '.')
+        if (!show_all && entry->d_name[0] == '.')
             continue;
 
-        printf("%s\n", entry->d_name);
+        snprintf(full_path, sizeof(full_path), "%s/%s", dir_path, entry->d_name);
+
+        if (stat(full_path, &st) == -1) {
+            printf("%s\n", entry->d_name);
+            continue;
+        }
+
+        if (S_ISDIR(st.st_mode)) {
+            printf(BLUE("%s\n"), entry->d_name);
+        } else if (access(full_path, X_OK) == 0) {
+            printf(GREEN("%s\n"), entry->d_name);
+        } else {
+            printf("%s\n", entry->d_name);
+        }
     }
     closedir(dir);
     return 0;
