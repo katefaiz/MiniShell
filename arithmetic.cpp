@@ -42,7 +42,7 @@ static int EvaluateComparison(const char *expr) {
 
     int left, right;
     if (!ParseNumber(&s, &left)) {
-        printf("arithmetic: left operand is not a number\n");
+        fprintf(stderr, RED("arithmetic: left operand is not a number\n"));
         return 0;
     }
     SkipSpaces(&s);
@@ -73,18 +73,18 @@ static int EvaluateComparison(const char *expr) {
         s ++; 
     }
     else {
-        printf("arithmetic: unknown operator\n");
+        fprintf(stderr, RED("arithmetic: unknown operator\n"));
         return 0;
     }
     SkipSpaces(&s);
 
     if (!ParseNumber(&s, &right)) {
-        printf("arithmetic: right operand is not a number\n");
+        fprintf(stderr, RED("arithmetic: right operand is not a number\n"));
         return 0;
     }
     SkipSpaces(&s);
     if (*s != '\0') {
-        printf("arithmetic: extra characters after expression\n");
+        fprintf(stderr, RED("arithmetic: extra characters after expression\n"));
         return 0;
     }
 
@@ -112,11 +112,11 @@ int ComparisonsArithmetic(char **tokens) {
     last--; //индекс последнего токена
 
     if (strncmp(tokens[0], "((", 2) != 0) {
-        printf("ComparisonsArithmetic: expected (( ... ))\n");
+        fprintf(stderr, RED("ComparisonsArithmetic: expected (( ... ))\n"));
         return 1;
     }
     if (last < 1 || (strstr(tokens[last], "))") == NULL && strcmp(tokens[last], "))") != 0)) {
-        printf("ComparisonsArithmetic: missing closing ))\n");
+        fprintf(stderr, RED("ComparisonsArithmetic: missing closing ))\n"));
         return 1;
     }
 
@@ -150,27 +150,27 @@ char* EvaluateArithmeticExpression(const char *expr) {
     const char *s = expr;
     int left, right;
     if (!ParseNumber(&s, &left)) {
-        printf("arithmetic: invalid left operand in %s\n", expr);
+        fprintf(stderr, RED("arithmetic: invalid left operand in %s\n"), expr);
         return strdup("0");
     }
     SkipSpaces(&s);
     if (!*s) {
-        printf("arithmetic: missing operator in %s\n", expr);
+        fprintf(stderr, RED("arithmetic: missing operator in %s\n"), expr);
         return strdup("0");
     }
     char op = *s;
     if (op != '+' && op != '-' && op != '*' && op != '/' && op != '%') {
-        printf("arithmetic: unknown operator '%c' in %s\n", op, expr);
+        fprintf(stderr, RED("arithmetic: unknown operator '%c' in %s\n"), op, expr);
         return strdup("0");
     }
     s++;
     if (!ParseNumber(&s, &right)) {
-        printf("arithmetic: invalid right operand in %s\n", expr);
+        fprintf(stderr, RED("arithmetic: invalid right operand in %s\n"), expr);
         return strdup("0");
     }
     SkipSpaces(&s);
     if (*s != '\0') {
-        printf("arithmetic: extra characters in %s\n", expr);
+        fprintf(stderr, RED("arithmetic: extra characters in %s\n"), expr);
         return strdup("0");
     }
 

@@ -32,7 +32,7 @@ int CdBuiltins(char **tokens) {
     if (old) setenv("OLDPWD", old, 1);
 
     if (chdir(path) != 0) {
-        printf(RED("Error: no such file or directory\n"));
+        fprintf(stderr, RED("Error: no such file or directory\n"));
         return 1;
     }
 
@@ -103,7 +103,7 @@ int TypeBuiltins(char **tokens) {
     char* path_env = getenv("PATH");
     char* path_copy = strdup(path_env); 
     if (!path_copy) {
-        printf("%s not found\n", tokens[1]);
+        fprintf(stderr, RED("%s not found\n"), tokens[1]);
         return 1;
     }
     char* dir = strtok(path_copy, ":");
@@ -121,7 +121,7 @@ int TypeBuiltins(char **tokens) {
 
     free(path_copy);
     if (!found)
-        printf("%s not found\n", tokens[1]);
+        fprintf(stderr, RED("%s not found\n"), tokens[1]);
     return found ? 0 : 1;
 }
 
@@ -268,7 +268,7 @@ int ExecuteCommands(char **tokens) {
     pid_t pid = fork(); // тут проверка вызова файла (из разряда ./ququ)
     if (pid == 0) {
         if (execvp(tokens[0], tokens) == -1) {
-            printf(RED("Error: command not found: %s :((\n"), tokens[0]);
+            fprintf(stderr, RED("Error: command not found: %s :((\n"), tokens[0]);
             exit(127);
         }
 
@@ -285,7 +285,7 @@ int ExecuteCommands(char **tokens) {
         }
     }
 
-    printf(RED("Error: command not found: %s :((\n"), tokens[0]);
+    fprintf(stderr, RED("Error: command not found: %s :((\n"), tokens[0]);
     return 1;
 }
 
