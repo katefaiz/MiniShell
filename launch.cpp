@@ -1,7 +1,7 @@
 #ifdef __APPLE__ 
-  #include <util.h>
+    #include <util.h>
 #else
-  #include <pty.h>
+    #include <pty.h>
 #endif
 #include <termios.h>
 
