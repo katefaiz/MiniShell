@@ -5,8 +5,8 @@ site:
 
 content:
   sources:
-    - url: ..
-      branches: HEAD
+    - url: https://github.com/katefaiz/MiniShell
+      branches: [main]
       start_path: minishell-docs/docs
 
 ui:

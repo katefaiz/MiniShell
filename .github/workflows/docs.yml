@@ -27,11 +27,14 @@ jobs:
         run: npm install -g @antora/cli @antora/site-generator
 
       - name: Build documentation site
-        run: antora antora-playbook.yml
+        run: antora minishell-docs/antora-playbook.yml
+
+      - name: Check build output
+        run: ls -la minishell-docs/build/site
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build/site
+          publish_dir: ./minishell-docs/build/site
           publish_branch: gh-pages
