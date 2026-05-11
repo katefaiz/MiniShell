@@ -61,10 +61,14 @@ status Read(about_text *text, FILE* file) {
     while ((c = fgetc(file)) != EOF) {
         if (c == '\\') {
             int next = fgetc(file);
-            if (next == '\n')
-                continue; 
-            else
+            if (next == '\n') {
+                text->buffer[text->size++] = ' ';
+                text->buffer[text->size++] = ';';
+                text->buffer[text->size++] = ' ';
+                continue;
+            } else {
                 ungetc(next, file);
+            }
         }
 
         if (c == '\n') 

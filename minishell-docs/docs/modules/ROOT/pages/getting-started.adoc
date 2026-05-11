@@ -1,0 +1,63 @@
+= Getting Started
+:description: How to build and run MiniShell
+
+== Requirements
+
+* GCC or G\+\+ (C++17 or later)
+* POSIX-compatible OS (Linux, macOS)
+
+== Building
+
+Clone the repository and run the build script:
+
+[source,bash]
+----
+git clone https://github.com/katefaiz/MiniShell.git
+cd MiniShell
+bash run.sh
+----
+
+Or compile manually:
+
+[source,bash]
+----
+g++ -o minishell \
+    main.cpp command.cpp arithmetic.cpp \
+    if_while.cpp variables.cpp read.cpp \
+    subsidiary.cpp launch.cpp
+----
+
+== Running
+
+[source,bash]
+----
+./minishell
+----
+
+The shell greets you and then shows a prompt with the current directory:
+
+----
+/home/user/MiniShell :)
+----
+
+Type any command and press Enter.
+To quit, run `exit` or press Ctrl+D (sends EOF, which terminates the read loop).
+
+== Quick example
+
+[source,bash]
+----
+/home/user :) echo hello world
+hello world
+
+/home/user :) cd /tmp
+
+/tmp :) x=42
+/tmp :) echo $((x * 2))
+84
+
+/tmp :) if (( x > 10 )) then echo big else echo small fi
+big
+
+/tmp :) exit
+----

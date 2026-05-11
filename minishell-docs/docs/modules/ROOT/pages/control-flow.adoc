@@ -1,0 +1,122 @@
+= Control Flow
+:description: if/elif/else and while loops in MiniShell
+
+MiniShell supports two control-flow constructs: conditional branching
+with `if` and iteration with `while`.
+
+NOTE: All keywords and commands must appear on a single input line,
+separated by spaces. Use `;` to sequence multiple commands within a block.
+
+== if / elif / else / fi
+
+=== Syntax
+
+[source]
+----
+if condition then commands [elif condition then commands] [else commands] fi
+----
+
+_condition_ is any command. Exit status 0 means true, non-zero means false.
+
+=== Simple if
+
+[source,bash]
+----
+x=10
+if (( x > 5 )) then echo big fi
+# big
+----
+
+=== if / else
+
+[source,bash]
+----
+x=3
+if (( x > 5 )) then echo big else echo small fi
+# small
+----
+
+=== if / elif / else
+
+[source,bash]
+----
+x=5
+if (( x > 5 )) then echo big elif (( x == 5 )) then echo exactly five else echo small fi
+# exactly five
+----
+
+=== Multiple commands in a branch
+
+Use `;` to run several commands in the same branch:
+
+[source,bash]
+----
+if (( x > 0 )) then echo positive ; echo value is $x fi
+----
+
+=== Using built-ins as conditions
+
+Any command works as a condition:
+
+[source,bash]
+----
+if true then echo yes fi
+# yes
+
+if false then echo yes else echo no fi
+# no
+----
+
+== while / do / done
+
+=== Syntax
+
+[source]
+----
+while condition do commands done
+----
+
+Execute _commands_ repeatedly while _condition_ returns exit status 0.
+
+=== Counting loop
+
+[source,bash]
+----
+i=0
+while (( i < 5 )) do echo $i ; i=$((i + 1)) done
+# 0
+# 1
+# 2
+# 3
+# 4
+----
+
+=== Infinite loop with exit condition
+
+[source,bash]
+----
+while true do echo looping ; exit done
+# looping
+# (shell exits)
+----
+
+== Semicolon command separator
+
+Multiple commands on one line can be separated by `;`:
+
+[source,bash]
+----
+echo one ; echo two ; echo three
+# one
+# two
+# three
+----
+
+This works both at the top level and inside control-flow blocks.
+
+== Limitations
+
+* No `break` or `continue` statements inside loops.
+* No `for` loops.
+* All control-flow tokens must be on one line; multi-line input is not supported.
+* No subshell execution inside conditions.

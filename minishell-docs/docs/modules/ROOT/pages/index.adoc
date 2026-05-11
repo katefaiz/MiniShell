@@ -1,0 +1,26 @@
+= MiniShell
+:description: A minimalist UNIX shell written in C++
+
+MiniShell is a minimalist command-line interpreter written in C.
+It supports built-in commands, shell variables, arithmetic expansion,
+and basic control flow.
+
+== Features
+
+* *Built-in commands* — `echo`, `cd`, `ls`, `pwd`, `exit`, `type`, `read`, `true`, `false`
+* *Variable assignment and expansion* — `name=Alice`, `echo $name`
+* *Arithmetic expansion* — `echo $((x + 1))`
+* *Arithmetic conditions* — `(( x > 0 ))`
+* *Control flow* — `if`/`elif`/`else`/`fi` and `while`/`do`/`done`
+* *External programs* — runs anything in `$PATH` via `execvp`
+* *Logical negation* — `! command`
+* *Semicolon separators* — multiple commands per line with `;`
+
+== Source
+
+https://github.com/katefaiz/MiniShell
+
+== Navigation
+
+Use the sidebar to explore the full documentation, or start with
+xref:getting-started.adoc[Getting Started].

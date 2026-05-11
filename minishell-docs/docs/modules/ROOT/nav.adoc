@@ -1,0 +1,7 @@
+.MiniShell Documentation
+* xref:index.adoc[Overview]
+* xref:getting-started.adoc[Getting Started]
+* xref:builtins.adoc[Built-in Commands]
+* xref:variables.adoc[Variables & Arithmetic]
+* xref:control-flow.adoc[Control Flow]
+* xref:manpage.adoc[man minishell(1)]

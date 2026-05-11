@@ -1,0 +1,161 @@
+= man minishell(1)
+:description: Full manual page for MiniShell
+
+== NAME
+
+minishell — minimalist command-line interpreter
+
+== SYNOPSIS
+
+[source]
+----
+minishell
+----
+
+== DESCRIPTION
+
+*minishell* is a minimalist UNIX shell written in C.
+It supports built-in commands, external program execution via *execvp*(3),
+shell variables, arithmetic expansion, and basic control flow
+(*if*/*elif*/*else*/*fi* and *while*/*do*/*done*).
+
+On startup the shell prints a greeting and then enters an interactive loop,
+displaying the current working directory as a prompt:
+
+----
+/home/user/project :)
+----
+
+Each line is read, tokenised, and dispatched to the appropriate handler.
+Multiple commands may be separated by `;` on the same line.
+
+== BUILT-IN COMMANDS
+
+See xref:builtins.adoc[Built-in Commands] for full documentation.
+
+[cols="1,3"]
+|===
+| Command | Description
+
+| `echo [arg ...]`       | Print arguments to stdout
+| `cd [directory]`       | Change working directory
+| `ls [-a] [directory]`  | List directory contents
+| `pwd`                  | Print working directory
+| `exit`                 | Exit the shell
+| `type name`            | Describe how a name is interpreted
+| `read`                 | Read a line from stdin
+| `true`                 | Return exit status 0
+| `false`                | Return exit status 1
+|===
+
+== VARIABLES
+
+Assign with `name=value` (no spaces). Expand with `$name`.
+Undefined variables expand to the empty string.
+
+[source,bash]
+----
+greeting=hello
+echo $greeting
+----
+
+== ARITHMETIC EXPANSION
+
+`$(( expr ))` evaluates an integer binary expression and substitutes the result.
+Operators: `+`, `-`, `*`, `/`, `%`.
+
+[source,bash]
+----
+echo $((3 + 4))    # 7
+x=10
+echo $((x * 2))   # 20
+----
+
+== ARITHMETIC CONDITIONS
+
+`(( expr ))` evaluates a comparison. Returns 0 (true) or 1 (false).
+Operators: `==`, `!=`, `<`, `>`, `\<=`, `>=`. Prefix `!` inverts the result.
+
+[source,bash]
+----
+(( x > 5 ))        # true if x > 5
+(( ! x == 0 ))     # true if x != 0
+----
+
+== CONTROL FLOW
+
+[source,bash]
+----
+if condition then commands [elif condition then commands] [else commands] fi
+
+while condition do commands done
+----
+
+All keywords must appear on a single input line.
+
+== EXTERNAL COMMANDS
+
+If the first token is not a built-in, *minishell* forks and calls *execvp*(3).
+This allows running any program in `$PATH` or by path:
+
+[source,bash]
+----
+gcc -o hello hello.c
+./hello
+----
+
+Exit status 127 is returned when the command is not found.
+
+== LOGICAL NEGATION
+
+`!` inverts exit status of the following command:
+
+[source,bash]
+----
+! false    # exit status 0
+! true     # exit status 1
+----
+
+== EXIT STATUS
+
+[cols="1,3"]
+|===
+| Status | Meaning
+
+| 0   | Success
+| 1   | General error
+| 127 | Command not found
+|===
+
+== SOURCE FILES
+
+[cols="1,3"]
+|===
+| File | Description
+
+| `main.cpp`        | Entry point, REPL loop
+| `command.cpp`     | Built-in implementations, command dispatch
+| `arithmetic.cpp`  | Arithmetic evaluation and comparison
+| `if_while.cpp`    | Control flow (`if` and `while`)
+| `variables.cpp`   | Variable storage and retrieval
+| `read.cpp`        | Line reading and tokenisation
+| `subsidiary.cpp`  | Utility functions, greeting
+|===
+
+== LIMITATIONS
+
+* No pipeline (`\|`) or I/O redirection (`>`, `<`, `>>`)
+* No command history or tab completion
+* Arithmetic expansion supports only one binary operation per expression
+* Control-flow keywords must appear on a single input line
+* No subshell execution (`$(command)`)
+* No quoting (single or double quotes are not handled)
+
+== AUTHORS
+
+Written by Kate Faiz and contributors. +
+Source: https://github.com/katefaiz/MiniShell
+
+== SEE ALSO
+
+*sh*(1), *bash*(1), *execvp*(3), *fork*(2), *waitpid*(2)

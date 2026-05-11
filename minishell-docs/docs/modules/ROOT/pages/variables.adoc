@@ -1,0 +1,120 @@
+= Variables & Arithmetic
+:description: Shell variables, arithmetic expansion and conditions in MiniShell
+
+== Shell Variables
+
+=== Assignment
+
+Variables are set with plain assignment — no spaces around `=`, no `$` prefix:
+
+[source,bash]
+----
+name=Alice
+count=0
+greeting=hello
+----
+
+=== Expansion
+
+Use `$varname` to substitute a variable's value anywhere in a command:
+
+[source,bash]
+----
+echo $greeting $name
+# hello Alice
+
+cd $HOME
+----
+
+Undefined variables expand to the empty string.
+
+== Arithmetic Expansion
+
+The syntax `$(( expr ))` evaluates an integer expression and substitutes
+the result inline.
+
+=== Supported operators
+
+[cols="1,3"]
+|===
+| Operator | Description
+
+| `+` | Addition
+| `-` | Subtraction
+| `*` | Multiplication
+| `/` | Integer division
+| `%` | Modulo (remainder)
+|===
+
+=== Examples
+
+[source,bash]
+----
+echo $((3 + 4))
+# 7
+
+echo $((10 % 3))
+# 1
+
+x=5
+echo $((x * 6))
+# 30
+
+i=0
+i=$((i + 1))
+echo $i
+# 1
+----
+
+NOTE: Each expression supports exactly one binary operation.
+Nested expressions like `$((1 + 2 + 3))` are not supported;
+use intermediate variables instead.
+
+[source,bash]
+----
+# Workaround for chained arithmetic:
+a=$((1 + 2))
+b=$((a + 3))
+echo $b
+# 6
+----
+
+== Arithmetic Conditions
+
+The syntax `(( expr ))` evaluates a comparison and returns exit status
+0 (true) or 1 (false). Used as the condition in xref:control-flow.adoc[if and while].
+
+=== Supported comparison operators
+
+[cols="1,3"]
+|===
+| Operator | Description
+
+| `==` | Equal
+| `!=` | Not equal
+| `<`  | Less than
+| `>`  | Greater than
+| `\<=` | Less than or equal
+| `>=` | Greater than or equal
+|===
+
+=== Negation
+
+Prefix the expression with `!` to invert the result:
+
+[source,bash]
+----
+(( ! x == 0 ))   # true when x is not 0
+----
+
+=== Examples
+
+[source,bash]
+----
+(( 3 < 5 ))      # exit status 0 (true)
+(( 10 == 9 ))    # exit status 1 (false)
+
+x=7
+(( x >= 5 ))     # exit status 0 (true)
+(( x != 7 ))     # exit status 1 (false)
+----
