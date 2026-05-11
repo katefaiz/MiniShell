@@ -22,9 +22,9 @@ Or compile manually:
 [source,bash]
 ----
 g++ -o minishell \
-    main.cpp command.cpp arithmetic.cpp \
-    if_while.cpp variables.cpp read.cpp \
-    subsidiary.cpp launch.cpp
+    src/main.cpp src/command.cpp src/arithmetic.cpp \
+    src/if_while.cpp src/variables.cpp src/read.cpp \
+    src/subsidiary.cpp src/launch.cpp
 ----
 
 == Running

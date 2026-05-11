@@ -144,7 +144,7 @@ Exit status 127 is returned when the command is not found.
 
 == LIMITATIONS
 
-* No pipeline (`\|`) or I/O redirection (`>`, `<`, `>>`)
+* No I/O redirection (`>`, `<`, `>>`)
 * No command history or tab completion
 * Arithmetic expansion supports only one binary operation per expression
 * Control-flow keywords must appear on a single input line
