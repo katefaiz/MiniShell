@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Control Flow :: MiniShell Documentation</title>
+    <link rel="canonical" href="https://katefaiz.github.io/MiniShell/minishell/1.0/control-flow.html">
+    <meta name="description" content="if/elif/else and while loops in MiniShell">
+    <meta name="generator" content="Antora 3.1.14">
+    <link rel="stylesheet" href="../../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://katefaiz.github.io/MiniShell">MiniShell Documentation</a>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="minishell" data-version="1.0">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="index.html">MiniShell</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">MiniShell Documentation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="getting-started.html">Getting Started</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="builtins.html">Built-in Commands</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="variables.html">Variables &amp; Arithmetic</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="control-flow.html">Control Flow</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="manpage.html">man minishell(1)</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">MiniShell</span>
+    <span class="version">1.0</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="index.html">MiniShell</a></div>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">1.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">MiniShell</a></li>
+    <li>MiniShell Documentation</li>
+    <li><a href="control-flow.html">Control Flow</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/katefaiz/MiniShell/edit/main/minishell-docs/docs/modules/ROOT/pages/control-flow.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Control Flow</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>MiniShell supports two control-flow constructs: conditional branching
+with <code>if</code> and iteration with <code>while</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+All keywords and commands must appear on a single input line,
+separated by spaces. Use <code>;</code> to sequence multiple commands within a block.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_if_elif_else_fi"><a class="anchor" href="#_if_elif_else_fi"></a>if / elif / else / fi</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_syntax"><a class="anchor" href="#_syntax"></a>Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">if condition then commands [elif condition then commands] [else commands] fi</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>condition</em> is any command. Exit status 0 means true, non-zero means false.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_simple_if"><a class="anchor" href="#_simple_if"></a>Simple if</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">x=10
+if (( x &gt; 5 )) then echo big fi
+# big</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_if_else"><a class="anchor" href="#_if_else"></a>if / else</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">x=3
+if (( x &gt; 5 )) then echo big else echo small fi
+# small</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_if_elif_else"><a class="anchor" href="#_if_elif_else"></a>if / elif / else</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">x=5
+if (( x &gt; 5 )) then echo big elif (( x == 5 )) then echo exactly five else echo small fi
+# exactly five</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_multiple_commands_in_a_branch"><a class="anchor" href="#_multiple_commands_in_a_branch"></a>Multiple commands in a branch</h3>
+<div class="paragraph">
+<p>Use <code>;</code> to run several commands in the same branch:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">if (( x &gt; 0 )) then echo positive ; echo value is $x fi</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using_built_ins_as_conditions"><a class="anchor" href="#_using_built_ins_as_conditions"></a>Using built-ins as conditions</h3>
+<div class="paragraph">
+<p>Any command works as a condition:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">if true then echo yes fi
+# yes
+
+if false then echo yes else echo no fi
+# no</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_while_do_done"><a class="anchor" href="#_while_do_done"></a>while / do / done</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_syntax_2"><a class="anchor" href="#_syntax_2"></a>Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">while condition do commands done</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Execute <em>commands</em> repeatedly while <em>condition</em> returns exit status 0.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_counting_loop"><a class="anchor" href="#_counting_loop"></a>Counting loop</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">i=0
+while (( i &lt; 5 )) do echo $i ; i=$((i + 1)) done
+# 0
+# 1
+# 2
+# 3
+# 4</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_infinite_loop_with_exit_condition"><a class="anchor" href="#_infinite_loop_with_exit_condition"></a>Infinite loop with exit condition</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">while true do echo looping ; exit done
+# looping
+# (shell exits)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_semicolon_command_separator"><a class="anchor" href="#_semicolon_command_separator"></a>Semicolon command separator</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Multiple commands on one line can be separated by <code>;</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">echo one ; echo two ; echo three
+# one
+# two
+# three</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This works both at the top level and inside control-flow blocks.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_limitations"><a class="anchor" href="#_limitations"></a>Limitations</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>No <code>break</code> or <code>continue</code> statements inside loops.</p>
+</li>
+<li>
+<p>No <code>for</code> loops.</p>
+</li>
+<li>
+<p>All control-flow tokens must be on one line; multi-line input is not supported.</p>
+</li>
+<li>
+<p>No subshell execution inside conditions.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

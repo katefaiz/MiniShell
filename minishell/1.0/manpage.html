@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>man minishell(1) :: MiniShell Documentation</title>
+    <link rel="canonical" href="https://katefaiz.github.io/MiniShell/minishell/1.0/manpage.html">
+    <meta name="description" content="Full manual page for MiniShell">
+    <meta name="generator" content="Antora 3.1.14">
+    <link rel="stylesheet" href="../../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://katefaiz.github.io/MiniShell">MiniShell Documentation</a>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="minishell" data-version="1.0">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="index.html">MiniShell</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">MiniShell Documentation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="getting-started.html">Getting Started</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="builtins.html">Built-in Commands</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="variables.html">Variables &amp; Arithmetic</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="control-flow.html">Control Flow</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="manpage.html">man minishell(1)</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">MiniShell</span>
+    <span class="version">1.0</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="index.html">MiniShell</a></div>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">1.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">MiniShell</a></li>
+    <li>MiniShell Documentation</li>
+    <li><a href="manpage.html">man minishell(1)</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/katefaiz/MiniShell/edit/main/minishell-docs/docs/modules/ROOT/pages/manpage.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">man minishell(1)</h1>
+<div class="sect1">
+<h2 id="_name"><a class="anchor" href="#_name"></a>NAME</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>minishell — minimalist command-line interpreter</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_synopsis"><a class="anchor" href="#_synopsis"></a>SYNOPSIS</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">minishell</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_description"><a class="anchor" href="#_description"></a>DESCRIPTION</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>minishell</strong> is a minimalist UNIX shell written in C.
+It supports built-in commands, external program execution via <strong>execvp</strong>(3),
+shell variables, arithmetic expansion, and basic control flow
+(<strong>if</strong>/<strong>elif</strong>/<strong>else</strong>/<strong>fi</strong> and <strong>while</strong>/<strong>do</strong>/<strong>done</strong>).</p>
+</div>
+<div class="paragraph">
+<p>On startup the shell prints a greeting and then enters an interactive loop,
+displaying the current working directory as a prompt:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>/home/user/project :)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Each line is read, tokenised, and dispatched to the appropriate handler.
+Multiple commands may be separated by <code>;</code> on the same line.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_built_in_commands"><a class="anchor" href="#_built_in_commands"></a>BUILT-IN COMMANDS</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>See <a href="builtins.html" class="xref page">Built-in Commands</a> for full documentation.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Command</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>echo [arg &#8230;&#8203;]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Print arguments to stdout</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>cd [directory]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Change working directory</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ls [-a] [directory]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List directory contents</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pwd</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Print working directory</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>exit</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Exit the shell</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Describe how a name is interpreted</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>read</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Read a line from stdin</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return exit status 0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return exit status 1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_variables"><a class="anchor" href="#_variables"></a>VARIABLES</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Assign with <code>name=value</code> (no spaces). Expand with <code>$name</code>.
+Undefined variables expand to the empty string.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">greeting=hello
+echo $greeting</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_arithmetic_expansion"><a class="anchor" href="#_arithmetic_expansion"></a>ARITHMETIC EXPANSION</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>$expr</code> evaluates an integer binary expression and substitutes the result.
+Operators: <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">echo $((3 + 4))    # 7
+x=10
+echo $((x * 2))   # 20</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_arithmetic_conditions"><a class="anchor" href="#_arithmetic_conditions"></a>ARITHMETIC CONDITIONS</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>expr</code> evaluates a comparison. Returns 0 (true) or 1 (false).
+Operators: <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>. Prefix <code>!</code> inverts the result.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">(( x &gt; 5 ))        # true if x &gt; 5
+(( ! x == 0 ))     # true if x != 0</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_control_flow"><a class="anchor" href="#_control_flow"></a>CONTROL FLOW</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">if condition then commands [elif condition then commands] [else commands] fi
+
+while condition do commands done</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>All keywords must appear on a single input line.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_external_commands"><a class="anchor" href="#_external_commands"></a>EXTERNAL COMMANDS</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If the first token is not a built-in, <strong>minishell</strong> forks and calls <strong>execvp</strong>(3).
+This allows running any program in <code>$PATH</code> or by path:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">gcc -o hello hello.c
+./hello</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Exit status 127 is returned when the command is not found.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_logical_negation"><a class="anchor" href="#_logical_negation"></a>LOGICAL NEGATION</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>!</code> inverts exit status of the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">! false    # exit status 0
+! true     # exit status 1</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_exit_status"><a class="anchor" href="#_exit_status"></a>EXIT STATUS</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Status</th>
+<th class="tableblock halign-left valign-top">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Success</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">General error</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">127</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Command not found</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_source_files"><a class="anchor" href="#_source_files"></a>SOURCE FILES</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">File</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>main.cpp</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Entry point, REPL loop</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>command.cpp</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Built-in implementations, command dispatch</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>arithmetic.cpp</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Arithmetic evaluation and comparison</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>if_while.cpp</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Control flow (<code>if</code> and <code>while</code>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>variables.cpp</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Variable storage and retrieval</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>read.cpp</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Line reading and tokenisation</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>subsidiary.cpp</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Utility functions, greeting</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_limitations"><a class="anchor" href="#_limitations"></a>LIMITATIONS</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>No pipeline (<code>\|</code>) or I/O redirection (<code>&gt;</code>, <code>&lt;</code>, <code>&gt;&gt;</code>)</p>
+</li>
+<li>
+<p>No command history or tab completion</p>
+</li>
+<li>
+<p>Arithmetic expansion supports only one binary operation per expression</p>
+</li>
+<li>
+<p>Control-flow keywords must appear on a single input line</p>
+</li>
+<li>
+<p>No subshell execution (<code>$(command)</code>)</p>
+</li>
+<li>
+<p>No quoting (single or double quotes are not handled)</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authors"><a class="anchor" href="#_authors"></a>AUTHORS</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Written by Kate Faiz and contributors.<br>
+Source: <a href="https://github.com/katefaiz/MiniShell" class="bare">https://github.com/katefaiz/MiniShell</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_see_also"><a class="anchor" href="#_see_also"></a>SEE ALSO</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>sh</strong>(1), <strong>bash</strong>(1), <strong>execvp</strong>(3), <strong>fork</strong>(2), <strong>waitpid</strong>(2)</p>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

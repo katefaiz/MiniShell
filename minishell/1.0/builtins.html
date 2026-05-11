@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Built-in Commands :: MiniShell Documentation</title>
+    <link rel="canonical" href="https://katefaiz.github.io/MiniShell/minishell/1.0/builtins.html">
+    <meta name="description" content="Reference for all MiniShell built-in commands">
+    <meta name="generator" content="Antora 3.1.14">
+    <link rel="stylesheet" href="../../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://katefaiz.github.io/MiniShell">MiniShell Documentation</a>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="minishell" data-version="1.0">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="index.html">MiniShell</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">MiniShell Documentation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="getting-started.html">Getting Started</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="builtins.html">Built-in Commands</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="variables.html">Variables &amp; Arithmetic</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="control-flow.html">Control Flow</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="manpage.html">man minishell(1)</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">MiniShell</span>
+    <span class="version">1.0</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="index.html">MiniShell</a></div>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">1.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">MiniShell</a></li>
+    <li>MiniShell Documentation</li>
+    <li><a href="builtins.html">Built-in Commands</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="https://github.com/katefaiz/MiniShell/edit/main/minishell-docs/docs/modules/ROOT/pages/builtins.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Built-in Commands</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>MiniShell implements the following built-in commands directly,
+without spawning a child process.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_echo"><a class="anchor" href="#_echo"></a>echo</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">echo [arg ...]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Print arguments to standard output separated by spaces, followed by a newline.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">echo hello world
+# hello world
+
+echo $PWD
+# /home/user</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_cd"><a class="anchor" href="#_cd"></a>cd</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">cd [directory]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Change the current working directory.
+If <em>directory</em> is omitted, change to <code>$HOME</code>.
+Updates the environment variables <code>PWD</code> and <code>OLDPWD</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd /tmp
+cd          # goes to $HOME</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_ls"><a class="anchor" href="#_ls"></a>ls</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">ls [-a] [directory]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>List directory contents. Defaults to the current directory.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Option</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-a</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Show hidden entries (names beginning with <code>.</code>)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Output is colour-coded: directories in blue, executables in green,
+regular files in the default colour.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ls
+ls -a /etc
+ls /usr/bin</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_pwd"><a class="anchor" href="#_pwd"></a>pwd</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">pwd</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Print the absolute path of the current working directory.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">pwd
+# /home/user/MiniShell</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_exit"><a class="anchor" href="#_exit"></a>exit</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">exit</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Terminate the shell immediately with exit status 0.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_type"><a class="anchor" href="#_type"></a>type</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">type name</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Describe how <em>name</em> would be interpreted: reports whether it is a shell
+built-in or prints the full path found in <code>$PATH</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">type echo
+# echo is a shell builtin
+
+type gcc
+# gcc is /usr/bin/gcc</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_read"><a class="anchor" href="#_read"></a>read</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">read</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Read a single line from standard input and print it back.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">read
+hello there
+# hello there</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_true"><a class="anchor" href="#_true"></a>true</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Return exit status 0 unconditionally.
+Useful as a condition in <code>while</code> loops.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_false"><a class="anchor" href="#_false"></a>false</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Return exit status 1 unconditionally.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_logical_negation"><a class="anchor" href="#_logical_negation"></a>Logical negation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Prepending <code>!</code> to any command inverts its exit status
+(0 becomes 1, non-zero becomes 0):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">! false      # exit status 0
+! true       # exit status 1
+! (( 1 &gt; 2 ))  # exit status 0 (because 1 &gt; 2 is false)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_exit_status_table"><a class="anchor" href="#_exit_status_table"></a>Exit status table</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Status</th>
+<th class="tableblock halign-left valign-top">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Success</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">General error (bad argument, command failed, etc.)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">127</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">External command not found</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script id="site-script" src="../../_/js/site.js" data-ui-root-path="../../_"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
