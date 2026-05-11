@@ -1,9 +1,20 @@
 #!/bin/bash
 
-g++ main.cpp arithmetic.cpp read.cpp command.cpp if_while.cpp test.cpp subsidiary.cpp variables.cpp -o minishell
-g++ launch.cpp subsidiary.cpp -o launch
+BUILD_DIR="build"
 
-./launch
+if [ ! -d "$BUILD_DIR" ]; then
+    mkdir "$BUILD_DIR"
+fi
 
-rm minishell
-rm launch
+cmake -S . -B "$BUILD_DIR"
+cmake --build "$BUILD_DIR"
+
+if [ $? -eq 0 ]; then
+    cd "$BUILD_DIR"
+    echo "--- Build finished successfully. Executing launch ---"
+    ./launch
+else
+    echo "--- Error building ---"
+    exit 1
+fi
+

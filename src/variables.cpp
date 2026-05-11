@@ -1,8 +1,14 @@
 #include "command.h"
 
 void AddVariable(const char* name, const char* value) {
-    assert(name);
-    assert(value);
+    if (!name) {
+        fprintf(stderr, RED("Error: name pointer is NULL.\n"));
+        return;
+    }
+    if (!value) {
+        fprintf(stderr, RED("Error: value pointer is NULL.\n"));
+        return;
+    }
 
     for (int i = 0; i < variables_count; ++i) {
         if (strcmp(variables[i].name, name) == 0) {
@@ -21,7 +27,10 @@ void AddVariable(const char* name, const char* value) {
 }
 
 const char* GetVariable(const char* name) {
-    assert(name);
+    if (!name) {
+        fprintf(stderr, RED("Error: name pointer is NULL.\n"));
+        return NULL;
+    }
 
     for (int i = 0; i < variables_count; ++i) {
         if (strcmp(variables[i].name, name) == 0) 

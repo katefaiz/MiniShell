@@ -12,7 +12,7 @@ void PrintGreeting(void) {
 
 void PrintExit(void) {
     printf(CYAN("\n  Bye bye from\n"));
-    printf(CYAN("  __  __ _       _ \n"));
+    printf(CYAN("  __  __ _  __ __ _ \n"));
     printf(CYAN(" |  \\/  (_) |  | (_)\n"));
     printf(CYAN(" |_|  |_|_|_|\\_||_|\n\n"));
     printf(GREEN("\n[minishell ended up working :)]\n"));
