@@ -1,5 +1,5 @@
 = MiniShell
-:description: A minimalist UNIX shell written in C++
+:description: A minimalist UNIX shell written in C
 
 MiniShell is a minimalist command-line interpreter written in C.
 It supports built-in commands, shell variables, arithmetic expansion,
