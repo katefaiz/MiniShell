@@ -91,7 +91,7 @@ if condition then commands [elif condition then commands] [else commands] fi
 while condition do commands done
 ----
 
-All keywords must appear on a single input line.
+All keywords must appear on a single input line or separated on different lines using '\'.
 
 == EXTERNAL COMMANDS
 
@@ -102,6 +102,11 @@ This allows running any program in `$PATH` or by path:
 ----
 gcc -o hello hello.c
 ./hello
+----
+----
+echo $PATH
+echo $OLDPWD
+echo $SHLVL
 ----
 
 Exit status 127 is returned when the command is not found.
