@@ -246,7 +246,7 @@ while condition do commands done</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>All keywords must appear on a single input line.</p>
+<p>All keywords must appear on a single input line or separated on different lines using '\'.</p>
 </div>
 </div>
 </div>
@@ -261,6 +261,13 @@ This allows running any program in <code>$PATH</code> or by path:</p>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">gcc -o hello hello.c
 ./hello</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>echo $PATH
+echo $OLDPWD
+echo $SHLVL</pre>
 </div>
 </div>
 <div class="paragraph">
