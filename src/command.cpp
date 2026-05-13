@@ -29,17 +29,14 @@ int CdBuiltins(char **tokens) {
         path = getenv("HOME");
     }
 
-    char *old = getenv("PWD");
-    if (old) setenv("OLDPWD", old, 1);
-
     if (chdir(path) != 0) {
         fprintf(stderr, RED("Error: no such file or directory\n"));
         return 1;
     }
 
     char cwd[PATH_MAX] = {};
-    getcwd(cwd, sizeof(cwd));
-    setenv("PWD", cwd, 1);
+    getcwd(cwd, sizeof(cwd)); //путь к текущей
+    setenv("PWD", cwd, 1); //перезапись
     return 0;
 }
 
@@ -71,9 +68,9 @@ int LsBuiltins(char **tokens) {
         if (!show_all && entry->d_name[0] == '.')
             continue;
 
-        snprintf(full_path, sizeof(full_path), "%s/%s", dir_path, entry->d_name);
+        snprintf(full_path, sizeof(full_path), "%s/%s", dir_path, entry->d_name); //склеили путь
 
-        if (stat(full_path, &st) == -1) {
+        if (stat(full_path, &st) == -1) { //чек выполнимости
             printf("%s\n", entry->d_name);
             continue;
         }
@@ -140,7 +137,7 @@ int TypeBuiltins(char **tokens) {
     while (dir != NULL) {
         char full_path[PATH_MAX];
         snprintf(full_path, sizeof(full_path), "%s/%s", dir, tokens[1]); //путь/имя
-        if (access(full_path, X_OK) == 0) { //проверяет, существует ли файл по пути full_path и имеет ли пользователь право на его выполнение (X_OK — execute)
+        if (access(full_path, X_OK) == 0) {
             printf("%s is %s\n", tokens[1], full_path);
             found = 1;
             break;
@@ -195,7 +192,7 @@ void ReplaceVariables(char *buffer) {
     }
 
     size_t buf_size = strlen(buffer) + DEFAULT_BIG_BUF_SIZE;
-    char *new_buf = (char *) calloc (buf_size, 1);
+    char *new_buf = (char *)calloc(buf_size, 1);
     if (!new_buf) {
         fprintf(stderr, RED("Error: memory allocation failed.\n"));
         return;
@@ -210,7 +207,7 @@ void ReplaceVariables(char *buffer) {
             INIT_BUFFER(var_name, DEFAULT_MIDDLE_BUF_SIZE);
             int j = 0;
 
-            while (*in && (isalnum((unsigned char)*in) || *in == '_')) {
+            while (*in && (isalnum((unsigned char)*in) || *in == '_')) { 
                 var_name[j++] = *in++;
             }
             var_name[j] = '\0';
@@ -250,7 +247,7 @@ void ReplaceArithmeticSubstitutions(char *buffer) {
             char *close = strstr(in + 3, "))");
             if (close) {
 
-                size_t expr_len = close - (in + 3);
+                size_t expr_len = close - (in + 3); //внутренность
                 char *expr = (char*)malloc(expr_len + 1);
                 strncpy(expr, in + 3, expr_len);
                 expr[expr_len] = '\0';
