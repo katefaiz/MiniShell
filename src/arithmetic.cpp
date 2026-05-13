@@ -57,7 +57,7 @@ static int EvaluateComparison(const char *expr) {
         SkipSpaces(&s);
     }
 
-    int left, right;
+    int left, right = 0;
     if (!ParseNumber(&s, &left)) {
         fprintf(stderr, RED("arithmetic: left operand is not a number\n"));
         return 0;
@@ -117,13 +117,12 @@ static int EvaluateComparison(const char *expr) {
     return invert ? !result : result;
 }
 
-
 int ComparisonsArithmetic(char **tokens) {
     if (!tokens || !*tokens) {
         fprintf(stderr, RED("Error: tokens pointer is NULL.\n"));
         return NULL_ERROR;
     }
-    //if (tokens[0] == NULL) return 1;
+
     int last = 0;
     while (tokens[last] != NULL) last++;
     last--; //индекс последнего токена
@@ -137,7 +136,7 @@ int ComparisonsArithmetic(char **tokens) {
         return 1;
     }
 
-    size_t expr_len = 0;
+    size_t expr_len = 0; //для внутренности
     for (int i = 1; i < last; i++) {
         expr_len += strlen(tokens[i]) + 1; 
     }
@@ -146,11 +145,13 @@ int ComparisonsArithmetic(char **tokens) {
         fprintf(stderr, "memory allocation error\n");
         return 1;
     }
+
     expr[0] = '\0';
-    for (int i = 1; i < last; i++) {
+    for (int i = 1; i < last; i++) { //склеиваем
         strcat(expr, tokens[i]);
         if (i < last - 1) strcat(expr, " ");
     }
+
     int res = EvaluateComparison(expr);
     free(expr);
 
@@ -165,7 +166,7 @@ char* EvaluateArithmeticExpression(const char *expr) {
         return NULL;
     }
     const char *s = expr;
-    int left, right;
+    int left, right = 0;
     if (!ParseNumber(&s, &left)) {
         fprintf(stderr, RED("arithmetic: invalid left operand in %s\n"), expr);
         return strdup("0");
@@ -213,6 +214,7 @@ char* EvaluateArithmeticExpression(const char *expr) {
     char *res_str = (char*)malloc(16);
     if (!res_str) return strdup("0");
     snprintf(res_str, 16, "%d", result);
+    
     return res_str;
 }
 
